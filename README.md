@@ -90,7 +90,7 @@ return
 
 ### /peerinfo
 
-上传自己的 peer 的信息
+上传自己的 peer 的信息 也是更新
 
 Method: POST
 
@@ -148,6 +148,27 @@ return
 }
 ```
 
+### /auth/verify/{ticket}
+
+验证邮箱
+
+request
+```json
+```
+
+return 
+
+200 === success
+
+400 === fail
+
+```json
+{
+    "errorcode": "",
+    "errormsg": "",
+}
+```
+
 ### /auth/login
 
 登陆鉴权
@@ -189,3 +210,11 @@ return
 |id |username|asn|public_access|wireguard_key|dn42_ipv4|dn42_ipv6|
 |---|--------|---|-------------|-------------|---------|---------|
 |001|eson|4242420|42.eson.ninja|asdkoskdad2==|172.xxxxx|fe80::222|
+
+## K-V: verify
+
+key: user id
+
+value: ticket
+
+expire: 10min
