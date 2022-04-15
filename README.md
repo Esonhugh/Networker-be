@@ -2,9 +2,9 @@
 
 DN42 config generate Sever (Backend)
 
-# API
+# VO
 
-## /api/v1/
+## /api/v1/ APIs
 
 ### /config
 
@@ -21,7 +21,7 @@ return
 
 ```json
 {
-    "nickname": "yourid like esonhugh",
+    "username": "yourid like esonhugh",
     "asn": "4242421234",
     "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
     "wireguard_key": "[BASE64 String]==",
@@ -29,7 +29,6 @@ return
     "dn42_ipv6": "fe80::XXXX",
 }
 ```
-
 
 ### /peerinfo/list
 
@@ -98,7 +97,7 @@ request
 
 ```json
 {
-    "nickname": "==username",
+    "username": "==username", // 实际返回的请求不用传 直接读 Cookie 拿到用户
     "asn": "4242421234",
     "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
     "wireguard_key": "[BASE64 String]==",
@@ -198,6 +197,33 @@ return
 ```
 
 # DTO
+
+## User
+
+``` json
+{
+    "id": 001,
+    "username": "eson",
+    "email": "data@Eson.ninja",
+    "verify": true,
+}
+```
+
+## Configs
+
+``` json
+{
+    "id": 001,
+    "username": "eson",
+    "asn": "data",
+    "public_access": "dn42.lv.eson.ninja",
+    "wireguard_key": "This is The PublicKey",
+    "dn42_ipv4": "",
+    "dn42_ipv6": ""
+}
+```
+
+# PO
 
 ## Table: auth
 
