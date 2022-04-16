@@ -1,0 +1,15 @@
+admin:
+  config:
+    username: admin
+    asn: 4242421234
+    public_access: "eson.ninja"
+    wireguard_key:  MY_PUBLIC_KEYs
+    dn42_ipv4: 172.20.42.193
+    dn42_ipv6: fd42:4242:4242:2239::1
+
+db:
+  mainDB:
+    User: root
+    Pass: esonhugh
+    Addr: "192.168.75.132"
+    DB: dn42
