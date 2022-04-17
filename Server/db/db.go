@@ -14,10 +14,6 @@ type DBList struct {
 
 var DBService *DBList
 
-func Init() {
-	DBService = InitDB()
-}
-
 func CreateDB(dbInfo struct {
 	Addr           string
 	User           string
