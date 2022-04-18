@@ -13,6 +13,9 @@ db:
     Pass: esonhugh
     Addr: "192.168.75.132"
     DB: dn42
+  redis:
+    Addr: "192.168.75.132:6379"
+    Pass: esonhugh
 
 jwt:
   secret: "夏天夏天悄悄过去，留下小秘密"

@@ -3,13 +3,16 @@ package db
 import (
 	"Network-be/config"
 	"fmt"
+	"github.com/patrickmn/go-cache"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 type DBList struct {
-	MainDB *gorm.DB
+	MainDB      *gorm.DB
+	TicketCache *cache.Cache
 }
 
 var DBService *DBList
@@ -51,6 +54,7 @@ func InitDB() *DBList {
 	}
 	// other DBs
 	dbList.MainDB = MainDB
+	dbList.TicketCache = cache.New(time.Hour*24, time.Hour*24)
 	return dbList
 }
 

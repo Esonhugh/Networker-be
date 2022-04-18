@@ -7,6 +7,7 @@ import (
 	"Network-be/data/VO/auth"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"log"
 )
 
 func AuthHandler(c *gin.Context) {
@@ -26,11 +27,11 @@ func AuthHandler(c *gin.Context) {
 	if UserInDB.CheckPassword(user.Password) {
 		// 生成Token
 		tokenString, _ := GenToken(user.Username)
+		c.SetCookie("Token", tokenString, 3600, "/", "", false, false)
 		c.JSON(200, VO.CommonResp{
 			ErrorCode: "0",
 			ErrorMsg:  "success",
 		})
-		c.SetCookie("Token", tokenString, 3600, "/", "", false, false)
 		return
 	}
 	c.JSON(200, VO.CommonResp{
@@ -52,7 +53,6 @@ func LogoutHandler(c *gin.Context) {
 func RegisterHandler(c *gin.Context) {
 	var user auth.RegRequest
 	err := c.ShouldBind(&user)
-
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "2001",
@@ -64,7 +64,7 @@ func RegisterHandler(c *gin.Context) {
 	var UserInDB PO.Auth
 	err = db.DBService.MainDB.Where("username = ?", user.Username).First(&UserInDB).Error
 	if err == gorm.ErrRecordNotFound {
-		// 注册用户
+		// 找不到用户 就进行注册用户
 		newUser := &PO.Auth{
 			Username: user.Username,
 			Email:    user.Email,
@@ -72,33 +72,50 @@ func RegisterHandler(c *gin.Context) {
 		}
 		newUser.SetPassword(user.Password)
 		db.DBService.MainDB.Create(newUser)
-		createVerifyTicket(newUser.Username)
+		createVerifyTicket(newUser.Username, newUser.Email)
 		c.JSON(200, VO.CommonResp{
 			ErrorCode: "0",
 			ErrorMsg:  "success, Check Your Email: " + newUser.Email,
 		})
 	} else {
-		// 存在用户但是 没有验证
 		if UserInDB.Verify == false {
-			createVerifyTicket(user.Username)
-			c.JSON(200, VO.CommonResp{
-				ErrorCode: "0",
-				ErrorMsg:  "success, Check Your Email: " + user.Email,
-			})
-		} else { // 存在用户而且验证
+			// 存在用户但是 没有验证
+			if user.Email == UserInDB.Email {
+				// 当前用户的邮箱和邮箱在数据库中的邮箱一致时 重新发送验证消息
+				createVerifyTicket(UserInDB.Username, UserInDB.Email)
+				c.JSON(200, VO.CommonResp{
+					ErrorCode: "0",
+					ErrorMsg:  "success, reCheck Your Email: " + user.Email + ". We have sent you a verification email.",
+				})
+			} else {
+				// 存在用户但是 Email 和表单中的对不上的时候 直接报错
+				c.JSON(400, VO.CommonResp{
+					ErrorCode: "2003",
+					ErrorMsg:  "Email is not matched in database. ",
+				})
+				log.Printf("User %v send request. \n"+
+					"But Email %v is not matched in database. \n"+
+					"Database Email is %v",
+					user.Username, user.Email, UserInDB.Email)
+			}
+		} else {
+			// 存在用户而且验证
 			c.JSON(400, VO.CommonResp{
 				ErrorCode: "2002",
 				ErrorMsg:  "User already exists,if You forget your password,please contact the administrator",
 			})
-
 		}
 	}
 	return
 }
 
-func createVerifyTicket(username string) {
+// createVerifyTicket 创建验证邮件 将 ticket 存入 memcache 中
+// username 负责定位 创建并且定位 ticket
+func createVerifyTicket(username string, email string) {
 	// todo: 验证码生成
-	// todo: 塞入 Redis
+	ticket := "123456"
+	// todo: 塞入 memcache
+	db.DBService.TicketCache.Set(username, ticket, 3600)
 	// todo: 发送邮件
 }
 
