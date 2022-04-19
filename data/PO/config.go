@@ -7,8 +7,8 @@ import (
 
 type Config struct {
 	gorm.Model
-	ID           int64 `gorm:"column:id;primary_key;increase"`
-	Username     string
+	ID           int64  `gorm:"column:id;primary_key;increase"`
+	Username     string `gorm:"unique;column:username"`
 	Asn          string
 	PublicAccess string
 	WireguardKey string
