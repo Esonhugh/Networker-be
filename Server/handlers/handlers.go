@@ -34,23 +34,30 @@ func GetPeerInfo(c *gin.Context) {
 
 func UpdatePeerInfo(c *gin.Context) {
 	var NewData peerinfo.UpdateInfo
-	c.Get("username")
+	Username, ok := c.Get("username")
+	if !ok { // not Exist
+		c.JSON(200, VO.CommonResp{
+			ErrorCode: "40022",
+			ErrorMsg:  "user not Login",
+		})
+		c.Abort()
+	}
 	err := c.ShouldBindJSON(NewData)
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
-			ErrorCode: "400",
+			ErrorCode: "40023",
 			ErrorMsg:  "Bad Struct:" + err.Error(),
 		})
 	}
-	// ToDo: Check Username is Correct?
-	if NewData.Username == "" {
+	if Username.(string) != NewData.Username {
 		c.JSON(400, VO.CommonResp{
-			ErrorCode: "400",
-			ErrorMsg:  "Bad User, Try Hack Others Config",
+			ErrorCode: "40024",
+			ErrorMsg:  "Username is not matched with login User",
 		})
+		c.Abort()
 	}
 	// db.Where(User{Name: "jinzhu"}).Assign(User{Age: 20}).FirstOrCreate(&user)
-	db.DBService.MainDB.Where(PO.Config{Username: NewData.Username}).
+	db.DBService.MainDB.Model(PO.Config{}).Where(PO.Config{Username: NewData.Username}).
 		Assign(NewData).
 		FirstOrCreate(&PO.Config{})
 	// if has Username == NewData.Username update the row

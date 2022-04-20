@@ -18,7 +18,7 @@ import (
 func AuthHandler(c *gin.Context) {
 	// 用户发送用户名和密码过来
 	var user auth.LoginRequest
-	err := c.ShouldBind(&user)
+	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "2001",
@@ -135,11 +135,8 @@ func RegisterHandler(c *gin.Context) {
 // createVerifyTicket 创建验证邮件 将 ticket 存入 memcache 中
 // username 负责定位 创建并且定位 ticket
 func CreateVerifyTicket(username string, email string) error {
-	// todo: 验证码生成
 	ticket := GenValidateCode(32)
-	// todo: 塞入 memcache
 	db.DBService.TicketCache.Set(username, ticket, 3600)
-	// todo: 发送邮件
 	err := SendVerifyByEmail(email, CreateContent(ticket))
 	log.Println(err)
 	return err

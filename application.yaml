@@ -28,5 +28,5 @@ email:
   auth: "BDZVAKLFPUSNWEGM" # 邮箱授权码
 
 server:
-  port: 8080 # 服务端口
+  port: "8080" # 服务端口
   host: "dn42.eson.ninja" # 服务的 IP 地址
