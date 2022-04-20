@@ -136,7 +136,7 @@ func RegisterHandler(c *gin.Context) {
 // username 负责定位 创建并且定位 ticket
 func CreateVerifyTicket(username string, email string) error {
 	ticket := GenValidateCode(32)
-	db.DBService.TicketCache.Set(username, ticket, 3600)
+	db.DBService.TicketCache.SetDefault(ticket, username)
 	err := SendVerifyByEmail(email, CreateContent(ticket))
 	log.Println(err)
 	return err
@@ -154,5 +154,21 @@ func GenValidateCode(width int) string {
 }
 
 func VerifyHandler(c *gin.Context) {
-
+	ticket := c.Param("ticket")
+	username, ok := db.DBService.TicketCache.Get(ticket)
+	if ok {
+		var User PO.Auth
+		db.DBService.MainDB.Model(&User).Where("username = ?", username.(string)).First(&User)
+		User.Verify = true
+		db.DBService.MainDB.Save(&User)
+		c.JSON(200, VO.CommonResp{
+			ErrorCode: "0",
+			ErrorMsg:  "You Have being Successful Verified",
+		})
+	} else {
+		c.JSON(400, VO.CommonResp{
+			ErrorCode: "40025",
+			ErrorMsg:  "Bad Ticket",
+		})
+	}
 }

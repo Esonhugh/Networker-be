@@ -11,7 +11,7 @@ const tmpl = `<center>
 <h1>You Successfully register into the ConfigSever</h1>
 <p>Your verify ticket is: %s</p>
 <p>Please click the link below to verify your account</p>
-<a href="//%s/verify?ticket=%s"> Verify </a>
+<a href="//%s/%s"> Verify </a>
 </center>`
 
 func SendVerifyByEmail(to, body string) error {

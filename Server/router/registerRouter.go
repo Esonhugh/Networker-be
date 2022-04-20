@@ -22,6 +22,7 @@ func (g *GinList) RegisterRouter() {
 	auth := apis.Group("/auth")
 	{
 		auth.POST("/login", handlers.AuthHandler)
+		auth.Any("/logout", handlers.LogoutHandler)
 		auth.POST("/register", handlers.RegisterHandler)
 		auth.GET("/verify/:ticket", handlers.VerifyHandler)
 	}
