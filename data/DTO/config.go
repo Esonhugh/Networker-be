@@ -1,7 +1,5 @@
 package DTO
 
-import "Network-be/data/VO/peerinfo"
-
 type Config struct {
 	ID           int64
 	Username     string
@@ -16,6 +14,7 @@ func (c *Config) ToVO() {
 
 }
 
+/*
 func (c *Config) ToDetailPeer() *peerinfo.DetailPeer {
 	return &peerinfo.DetailPeer{
 		ID:           c.ID,
@@ -35,3 +34,4 @@ func (c *Config) ToSimplePeer() *peerinfo.SimplePeer {
 		Asn:      c.Asn,
 	}
 }
+*/

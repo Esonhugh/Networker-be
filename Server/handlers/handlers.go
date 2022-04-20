@@ -34,6 +34,7 @@ func GetPeerInfo(c *gin.Context) {
 
 func UpdatePeerInfo(c *gin.Context) {
 	var NewData peerinfo.UpdateInfo
+	c.Get("username")
 	err := c.ShouldBindJSON(NewData)
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
@@ -53,7 +54,7 @@ func UpdatePeerInfo(c *gin.Context) {
 		Assign(NewData).
 		FirstOrCreate(&PO.Config{})
 	// if has Username == NewData.Username update the row
-	// else create a new row
+	// if not equal, create a new row
 	c.JSON(200, VO.CommonResp{
 		ErrorCode: "0",
 		ErrorMsg:  "Update Success",

@@ -21,8 +21,8 @@ func (g *GinList) RegisterRouter() {
 	// auth sub-api path
 	auth := apis.Group("/auth")
 	{
-		auth.POST("/login", jwt.AuthHandler)
-		auth.POST("/register", jwt.RegisterHandler)
-		auth.GET("/verify/:ticket", jwt.VerifyHandler)
+		auth.POST("/login", handlers.AuthHandler)
+		auth.POST("/register", handlers.RegisterHandler)
+		auth.GET("/verify/:ticket", handlers.VerifyHandler)
 	}
 }

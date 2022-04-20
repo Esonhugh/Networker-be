@@ -12,7 +12,7 @@ type GinList struct {
 
 var GinServer *GinList
 
-func init() {
+func Init() {
 	GinServer = InitGin()
 }
 

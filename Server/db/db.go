@@ -36,7 +36,6 @@ func CreateDB(dbInfo struct {
 }
 
 func InitDB() *DBList {
-	dbList := new(DBList)
 	MainDB, err := CreateDB(struct {
 		Addr           string
 		User           string
@@ -52,10 +51,11 @@ func InitDB() *DBList {
 	if err != nil {
 		log.Panic("connect DB error: ", err.Error())
 	}
-	// other DBs
-	dbList.MainDB = MainDB
-	dbList.TicketCache = cache.New(time.Hour*24, time.Hour*24)
-	return dbList
+	DBService = &DBList{
+		MainDB: MainDB,
+	}
+	DBService.TicketCache = cache.New(time.Hour*24, time.Hour*24)
+	return DBService
 }
 
 func CreateDSN(dbInfo struct {

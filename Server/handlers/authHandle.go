@@ -1,13 +1,18 @@
-package jwt
+package handlers
 
 import (
 	"Network-be/Server/db"
+	"Network-be/Server/router/jwt"
 	"Network-be/data/PO"
 	"Network-be/data/VO"
 	"Network-be/data/VO/auth"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
+	"math/rand"
+	"strings"
+	"time"
 )
 
 func AuthHandler(c *gin.Context) {
@@ -26,7 +31,7 @@ func AuthHandler(c *gin.Context) {
 	db.DBService.MainDB.Where("username = ?", user.Username).First(&UserInDB)
 	if UserInDB.CheckPassword(user.Password) {
 		// 生成Token
-		tokenString, _ := GenToken(user.Username)
+		tokenString, _ := jwt.GenToken(user.Username)
 		c.SetCookie("Token", tokenString, 3600, "/", "", false, false)
 		c.JSON(200, VO.CommonResp{
 			ErrorCode: "0",
@@ -41,6 +46,7 @@ func AuthHandler(c *gin.Context) {
 	return
 }
 
+// LogoutHandler 登出
 func LogoutHandler(c *gin.Context) {
 	c.JSON(200, VO.CommonResp{
 		ErrorCode: "0",
@@ -50,9 +56,10 @@ func LogoutHandler(c *gin.Context) {
 	return
 }
 
+// RegisterHandler 注册用户
 func RegisterHandler(c *gin.Context) {
 	var user auth.RegRequest
-	err := c.ShouldBind(&user)
+	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "2001",
@@ -62,7 +69,9 @@ func RegisterHandler(c *gin.Context) {
 	}
 
 	var UserInDB PO.Auth
-	err = db.DBService.MainDB.Where("username = ?", user.Username).First(&UserInDB).Error
+	err = db.DBService.MainDB.Model(&UserInDB).
+		Where("username = ?", user.Username).
+		First(&UserInDB).Error
 	if err == gorm.ErrRecordNotFound {
 		// 找不到用户 就进行注册用户
 		newUser := &PO.Auth{
@@ -72,17 +81,31 @@ func RegisterHandler(c *gin.Context) {
 		}
 		newUser.SetPassword(user.Password)
 		db.DBService.MainDB.Create(newUser)
-		createVerifyTicket(newUser.Username, newUser.Email)
-		c.JSON(200, VO.CommonResp{
-			ErrorCode: "0",
-			ErrorMsg:  "success, Check Your Email: " + newUser.Email,
-		})
+		err = CreateVerifyTicket(newUser.Username, newUser.Email)
+		if err != nil {
+			c.JSON(500, VO.CommonResp{
+				ErrorCode: "5001",
+				ErrorMsg:  "Internal Server Error: Mail Send Failed",
+			})
+		} else {
+			c.JSON(200, VO.CommonResp{
+				ErrorCode: "0",
+				ErrorMsg:  "success, Check Your Email: " + newUser.Email,
+			})
+		}
 	} else {
 		if UserInDB.Verify == false {
 			// 存在用户但是 没有验证
 			if user.Email == UserInDB.Email {
 				// 当前用户的邮箱和邮箱在数据库中的邮箱一致时 重新发送验证消息
-				createVerifyTicket(UserInDB.Username, UserInDB.Email)
+				err = CreateVerifyTicket(UserInDB.Username, UserInDB.Email)
+				// 邮件发送失败
+				if err != nil {
+					c.JSON(500, VO.CommonResp{
+						ErrorCode: "5001",
+						ErrorMsg:  "Internal Server Error: Mail Send Failed",
+					})
+				}
 				c.JSON(200, VO.CommonResp{
 					ErrorCode: "0",
 					ErrorMsg:  "success, reCheck Your Email: " + user.Email + ". We have sent you a verification email.",
@@ -111,12 +134,26 @@ func RegisterHandler(c *gin.Context) {
 
 // createVerifyTicket 创建验证邮件 将 ticket 存入 memcache 中
 // username 负责定位 创建并且定位 ticket
-func createVerifyTicket(username string, email string) {
+func CreateVerifyTicket(username string, email string) error {
 	// todo: 验证码生成
-	ticket := "123456"
+	ticket := GenValidateCode(32)
 	// todo: 塞入 memcache
 	db.DBService.TicketCache.Set(username, ticket, 3600)
 	// todo: 发送邮件
+	err := SendVerifyByEmail(email, CreateContent(ticket))
+	log.Println(err)
+	return err
+}
+
+func GenValidateCode(width int) string {
+	numeric := [10]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	r := len(numeric)
+	rand.Seed(time.Now().UnixNano())
+	var sb strings.Builder
+	for i := 0; i < width; i++ {
+		fmt.Fprintf(&sb, "%d", numeric[rand.Intn(r)])
+	}
+	return sb.String()
 }
 
 func VerifyHandler(c *gin.Context) {

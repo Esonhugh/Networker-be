@@ -1,5 +1,5 @@
 admin:
-  config:
+  config: # 你的配置
     username: admin
     asn: 4242421234
     public_access: "eson.ninja"
@@ -9,14 +9,24 @@ admin:
 
 db:
   mainDB:
-    User: root
-    Pass: esonhugh
-    Addr: "192.168.75.132"
-    DB: dn42
+    User: root # 数据库用户
+    Pass: esonhugh # 数据库密码
+    Addr: "192.168.75.132" # 数据库地址
+    DB: dn42 # 数据库名称
   redis:
-    Addr: "192.168.75.132:6379"
-    Pass: esonhugh
+    Addr: "192.168.75.132:6379" # Redis Host
+    Pass: esonhugh # Redis 密码
 
 jwt:
-  secret: "夏天夏天悄悄过去，留下小秘密"
-  issuer: "Esonhugh"
+  secret: "夏天夏天悄悄过去，留下小秘密" # 签发密钥
+  issuer: "Esonhugh" # 签发人
+
+email:
+  host: "smtp.126.com" # smtp服务器地址
+  port: 25 # 端口
+  user: "config_server@126.com" # 发送邮件的邮箱
+  auth: "BDZVAKLFPUSNWEGM" # 邮箱授权码
+
+server:
+  port: 8080 # 服务端口
+  host: "dn42.eson.ninja" # 服务的 IP 地址

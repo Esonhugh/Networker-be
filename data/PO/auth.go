@@ -1,15 +1,14 @@
 package PO
 
 import (
-	"Network-be/data/DTO"
 	"Network-be/utils"
 	"gorm.io/gorm"
 )
 
 type Auth struct {
 	gorm.Model
-	ID       int64 `gorm:"primary_key"`
-	Username string
+	ID       int64    `gorm:"primary_key"`
+	Username string   `gorm:"unqiue;not null"`
 	Password [16]byte // password with md5
 	Email    string
 	Verify   bool
@@ -28,6 +27,7 @@ func (auth *Auth) CheckPassword(password string) bool {
 	return utils.MD5(password) == auth.Password
 }
 
+/*
 func (auth *Auth) ToDto() *DTO.User {
 	return &DTO.User{
 		ID:       auth.ID,
@@ -36,3 +36,4 @@ func (auth *Auth) ToDto() *DTO.User {
 		Verify:   auth.Verify,
 	}
 }
+*/
