@@ -26,7 +26,7 @@ return
     "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
     "wireguard_key": "[BASE64 String]==",
     "dn42_ipv4": "172.20.xx.xx",
-    "dn42_ipv6": "fe80::XXXX",
+    "dn42_ipv6": "fe80::XXXX"
 }
 ```
 
@@ -47,12 +47,12 @@ return
 [
     {
         "id": "XXX",
-        "nickname": "yourid like esonhugh",
+        "username": "yourid like esonhugh",
         "asn": "4242421234"
     }, 
     {
         "id": "XXX",
-        "nickname": "yourid like esonhugh",
+        "username": "yourid like esonhugh",
         "asn": "4242421234"
     }, 
     ...
@@ -78,12 +78,12 @@ return
 ```json
 {
     "id": "XXX",
-    "nickname": "yourid like esonhugh",
+    "username": "yourid like esonhugh",
     "asn": "4242421234",
     "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
     "wireguard_key": "[BASE64 String]==",
     "dn42_ipv4": "172.20.xx.xx",
-    "dn42_ipv6": "fe80::XXXX",
+    "dn42_ipv6": "fe80::XXXX"
 }
 ```
 
@@ -102,7 +102,7 @@ request
     "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
     "wireguard_key": "[BASE64 String]==",
     "dn42_ipv4": "172.20.xx.xx",
-    "dn42_ipv6": "fe80::XXXX",
+    "dn42_ipv6": "fe80::XXXX"
 }
 ```
 
@@ -115,7 +115,7 @@ return
 ```json
 {
     "errorcode": "",
-    "errormsg": "",
+    "errormsg": ""
 }
 ```
 
@@ -130,7 +130,7 @@ request
 {
     "username": "xxxxxx",
     "password": "xxxxxxxxxxxxxxxxx",
-    "email": "",
+    "email": ""
 }
 ```
 
@@ -143,7 +143,7 @@ return
 ```json
 {
     "errorcode": "",
-    "errormsg": "",
+    "errormsg": ""
 }
 ```
 
@@ -164,7 +164,7 @@ return
 ```json
 {
     "errorcode": "",
-    "errormsg": "",
+    "errormsg": ""
 }
 ```
 
@@ -192,7 +192,7 @@ return
 ```json
 {
     "errorcode": "",
-    "errormsg": "",
+    "errormsg": ""
 }
 ```
 
@@ -227,9 +227,9 @@ return
 
 ## Table: auth
 
-|id |username|MD5(password)|email|verify|
-|---|--------|-------------|-----|------|
-|001|eson|pasadsijiadjaisd|eson.nin|true|
+|id |username| Bcrypt(password) |email|verify|
+|---|--------|------------------|-----|------|
+|001|eson| pasadsijiadjaisd |eson.nin|true|
 
 ## Table: config
 

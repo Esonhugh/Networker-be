@@ -2,14 +2,16 @@ package PO
 
 import (
 	"Network-be/utils"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Auth struct {
 	gorm.Model
-	ID       int64    `gorm:"primary_key"`
-	Username string   `gorm:"unqiue;not null"`
-	Password [16]byte // password with md5
+	ID       int64  `gorm:"primary_key,AUTO_INCREMENT"`
+	Username string `gorm:"unique;not null"`
+	Password []byte // password with Hashed
 	Email    string
 	Verify   bool
 }
@@ -19,12 +21,17 @@ func (auth *Auth) TableName() string {
 }
 
 func (auth *Auth) SetPassword(password string) {
-	auth.Password = utils.MD5(password)
+	auth.Password = utils.HASH(password)
 }
 
 // CheckPassword 检查确认密码
 func (auth *Auth) CheckPassword(password string) bool {
-	return utils.MD5(password) == auth.Password
+	err := bcrypt.CompareHashAndPassword(auth.Password, []byte(password))
+	if err != nil {
+		log.Println("Password Compare failed:", err)
+		return false
+	}
+	return true
 }
 
 /*

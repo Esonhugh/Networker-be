@@ -1,7 +1,8 @@
 package utils
 
-import "crypto/md5"
+import "golang.org/x/crypto/bcrypt"
 
-func MD5(str string) [16]byte {
-	return md5.Sum([]byte(str))
+func HASH(str string) []byte {
+	hash, _ := bcrypt.GenerateFromPassword([]byte(str), bcrypt.DefaultCost)
+	return hash
 }

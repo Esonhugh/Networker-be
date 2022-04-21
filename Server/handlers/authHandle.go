@@ -25,6 +25,7 @@ func AuthHandler(c *gin.Context) {
 			ErrorMsg:  "Invalid Request",
 		})
 		c.Abort()
+		return
 	}
 	// 校验用户名和密码是否正确
 	var UserInDB PO.Auth
@@ -80,7 +81,7 @@ func RegisterHandler(c *gin.Context) {
 			Verify:   false,
 		}
 		newUser.SetPassword(user.Password)
-		db.DBService.MainDB.Create(newUser)
+		db.DBService.MainDB.Create(&newUser)
 		err = CreateVerifyTicket(newUser.Username, newUser.Email)
 		if err != nil {
 			c.JSON(500, VO.CommonResp{
