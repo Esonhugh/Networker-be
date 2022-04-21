@@ -1,7 +1,6 @@
 package PO
 
 import (
-	"Network-be/data/DTO"
 	"gorm.io/gorm"
 )
 
@@ -20,6 +19,7 @@ func (*Config) TableName() string {
 	return "config"
 }
 
+/*
 func (c *Config) ToDto() *DTO.Config {
 	return &DTO.Config{
 		ID:           c.ID,
@@ -31,3 +31,4 @@ func (c *Config) ToDto() *DTO.Config {
 		DN42_IPv6:    c.DN42_IPv6,
 	}
 }
+*/

@@ -22,14 +22,20 @@ func GetConfig(c *gin.Context) {
 
 func GetPeerList(c *gin.Context) {
 	var peerList peerinfo.PeerList
-	db.DBService.MainDB.Model(&PO.Auth{}).Find(&peerList)
+	db.DBService.MainDB.Model(&PO.Config{}).Find(&peerList.Peers)
 	c.JSON(200, peerList)
 }
 
 func GetPeerInfo(c *gin.Context) {
 	var peerInfo peerinfo.DetailPeer
-	db.DBService.MainDB.Model(&PO.Auth{}).Where("peer_id = ?", c.Param("id")).First(&peerInfo)
-	c.JSON(200, peerInfo)
+	if db.DBService.MainDB.Model(&PO.Config{}).Where("peer_id = ?", c.Param("id")).First(&peerInfo).Error == nil {
+		c.JSON(200, peerInfo)
+	} else {
+		c.JSON(400, VO.CommonResp{
+			ErrorCode: "1",
+			ErrorMsg:  "peer not found",
+		})
+	}
 }
 
 func UpdatePeerInfo(c *gin.Context) {
@@ -41,13 +47,15 @@ func UpdatePeerInfo(c *gin.Context) {
 			ErrorMsg:  "user not Login",
 		})
 		c.Abort()
+		return
 	}
-	err := c.ShouldBindJSON(NewData)
+	err := c.ShouldBindJSON(&NewData)
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "40023",
 			ErrorMsg:  "Bad Struct:" + err.Error(),
 		})
+		return
 	}
 	if Username.(string) != NewData.Username {
 		c.JSON(400, VO.CommonResp{
@@ -55,9 +63,10 @@ func UpdatePeerInfo(c *gin.Context) {
 			ErrorMsg:  "Username is not matched with login User",
 		})
 		c.Abort()
+		return
 	}
 	// db.Where(User{Name: "jinzhu"}).Assign(User{Age: 20}).FirstOrCreate(&user)
-	db.DBService.MainDB.Model(PO.Config{}).Where(PO.Config{Username: NewData.Username}).
+	db.DBService.MainDB.Model(&PO.Config{}).Where(&PO.Config{Username: NewData.Username}).
 		Assign(NewData).
 		FirstOrCreate(&PO.Config{})
 	// if has Username == NewData.Username update the row

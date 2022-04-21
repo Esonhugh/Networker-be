@@ -64,11 +64,11 @@ func RegisterHandler(c *gin.Context) {
 	if err != nil {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "2001",
-			ErrorMsg:  "invalid params",
+			ErrorMsg:  "invalid params, check your request param",
 		})
 		c.Abort()
+		return
 	}
-
 	var UserInDB PO.Auth
 	err = db.DBService.MainDB.Model(&UserInDB).
 		Where("username = ?", user.Username).
@@ -115,7 +115,7 @@ func RegisterHandler(c *gin.Context) {
 				// 存在用户但是 Email 和表单中的对不上的时候 直接报错
 				c.JSON(400, VO.CommonResp{
 					ErrorCode: "2003",
-					ErrorMsg:  "Email is not matched in database. ",
+					ErrorMsg:  "Email is not matched in database. Are You Change it? ",
 				})
 				log.Printf("User %v send request. \n"+
 					"But Email %v is not matched in database. \n"+

@@ -2,6 +2,12 @@
 
 DN42 config generate Sever (Backend)
 
+# Rules
+
+用户名需要 4-20 长度
+
+密码需要 8-20 长度
+
 # VO
 
 ## /api/v1/ APIs
