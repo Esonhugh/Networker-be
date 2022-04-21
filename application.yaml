@@ -1,32 +1,32 @@
 admin:
-  config: # 你的配置
-    username: admin
-    asn: 4242421234
-    public_access: "eson.ninja"
-    wireguard_key:  MY_PUBLIC_KEYs
-    dn42_ipv4: 172.20.42.193
-    dn42_ipv6: fd42:4242:4242:2239::1
+  config:                                     # 这里需要填写你的 DN42 用于 Peer 的服务配置 将会展示在 /api/v1/config 下
+    username: admin                           # 你的名称
+    asn: "4242421234"                         # ASN
+    public_access: "eson.ninja"               # 公网地址 domain IPv4 IPv6
+    wireguard_key:  MY_PUBLIC_KEYs            # Wireguard 配置
+    dn42_ipv4: 172.20.42.193                  # DN42 内网的 IPv4
+    dn42_ipv6: fd42:4242:4242:2239::1         # DN42 内网的 IPv6
 
 db:
-  mainDB:
-    User: root # 数据库用户
-    Pass: esonhugh # 数据库密码
-    Addr: "192.168.75.132" # 数据库地址
-    DB: dn42 # 数据库名称
-  redis:
-    Addr: "192.168.75.132:6379" # Redis Host
-    Pass: esonhugh # Redis 密码
+  mainDB:                                     # 用于存储 配置信息 与 用户 登陆 等信息的主数据库
+    User: root                                # 数据库用户
+    Pass: esonhugh                            # 数据库密码
+    Addr: "192.168.75.132"                    # 数据库地址
+    DB: dn42                                  # 数据库名称
+  redis:                                      # 用于存储键值对 同时作为验证消息的 验证器 [已弃用]
+    Addr: "192.168.75.132:6379"               # Redis Host
+    Pass: esonhugh                            # Redis 密码
 
 jwt:
-  secret: "夏天夏天悄悄过去，留下小秘密" # 签发密钥
-  issuer: "Esonhugh" # 签发人
+  secret: "夏天夏天悄悄过去，留下小秘密"           # 签发密钥
+  issuer: "Esonhugh"                          # 签发人
 
 email:
-  host: "smtp.126.com" # smtp服务器地址
-  port: 25 # 端口
-  user: "config_server@126.com" # 发送邮件的邮箱
-  auth: "BDZVAKLFPUSNWEGM" # 邮箱授权码
+  host: "smtp.126.com"                        # smtp服务器地址
+  port: 25                                    # 端口
+  user: "config_server@126.com"               # 发送邮件的邮箱
+  auth: "BDZVAKLFPUSNWEGM"                    # 邮箱授权码
 
 server:
-  port: "8080" # 服务端口
-  host: "127.0.0.1:8080/api/v1/auth/verify" # 服务的 IP 地址 用于接受 邮件的 Call Back
+  port: "8080"                                # Web 服务端口
+  host: "127.0.0.1:8080/api/v1/auth/verify/"  # 服务的 IP 地址 用于接受 邮件的 Call Back 的地方
