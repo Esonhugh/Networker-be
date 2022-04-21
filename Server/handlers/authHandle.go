@@ -40,7 +40,7 @@ func AuthHandler(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(200, VO.CommonResp{
+	c.JSON(400, VO.CommonResp{
 		"2002",
 		"Authorization failed",
 	})
@@ -102,7 +102,7 @@ func RegisterHandler(c *gin.Context) {
 				err = CreateVerifyTicket(UserInDB.Username, UserInDB.Email)
 				// 邮件发送失败
 				if err != nil {
-					c.JSON(500, VO.CommonResp{
+					c.JSON(400, VO.CommonResp{
 						ErrorCode: "5001",
 						ErrorMsg:  "Internal Server Error: Mail Send Failed",
 					})

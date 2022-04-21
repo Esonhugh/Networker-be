@@ -16,6 +16,7 @@ func (g *GinList) RegisterRouter() {
 		peerinfo := apis.Group("/peerinfo")
 		{
 			peerinfo.GET("/list", jwt.JWTAuthMiddleware, handlers.GetPeerList)
+			peerinfo.GET("/me", jwt.JWTAuthMiddleware, handlers.GetMyInfo)
 			peerinfo.GET("/:id", jwt.JWTAuthMiddleware, handlers.GetPeerInfo)
 			peerinfo.POST("/", jwt.JWTAuthMiddleware, handlers.UpdatePeerInfo)
 		}
