@@ -21,8 +21,8 @@ func GetConfig(c *gin.Context) {
 }
 
 func GetPeerList(c *gin.Context) {
-	var peerList peerinfo.PeerList
-	db.DBService.MainDB.Model(&PO.Config{}).Find(&peerList.Peers)
+	var peerList []peerinfo.SimplePeer
+	db.DBService.MainDB.Model(&PO.Config{}).Find(&peerList)
 	c.JSON(200, peerList)
 }
 
