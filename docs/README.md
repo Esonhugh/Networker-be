@@ -1,6 +1,6 @@
-# networker-be
+# 文档
 
-DN42 config generate Sever (Backend)
+[TOC]
 
 # Rules
 
@@ -268,9 +268,9 @@ return
 
 ## Table: auth
 
-|id |username| Bcrypt(password) |email|verify|
-|---|--------|------------------|-----|------|
-|001|eson| pasadsijiadjaisd |eson.nin|true|
+|id | username | Bcrypt(password) | email    | verify |
+|---|----------|------------------|----------|--------|
+|001| eson     | pasadsijiadjaisd | eson.nin | true   |
 
 ## Table: config
 
@@ -285,3 +285,23 @@ key: user id
 value: ticket
 
 expire: 10min
+
+## 开发说明
+
+- /config 用于读取 配置文件 设置全局配置 config.GlobalConfig
+
+- /data 定义多个结构体 用于数据传输 
+
+  其中 
+
+  - PO 对接 Gorm
+  - VO 对接 传输出入的 Json 
+  - DTO 目前并未使用可以作为 参考作为二次开发的内容
+
+- /Server 负责多个后端资源的规划
+  
+  - router 负责 Gin 相关 jwt 内嵌其中
+  - handlers 负责 Gin 处理的函数 可以理解为 Controller
+  - db 负责初始化 DB 设置全局 配置 db.DBService 
+    
+    - 含有 Mysql 与 Memcache 两层
