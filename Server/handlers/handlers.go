@@ -28,7 +28,7 @@ func GetPeerList(c *gin.Context) {
 
 func GetPeerInfo(c *gin.Context) {
 	var peerInfo peerinfo.DetailPeer
-	if db.DBService.MainDB.Model(&PO.Config{}).Where("peer_id = ?", c.Param("id")).First(&peerInfo).Error == nil {
+	if db.DBService.MainDB.Model(&PO.Config{}).Where("id = ?", c.Param("id")).First(&peerInfo).Error == nil {
 		c.JSON(200, peerInfo)
 	} else {
 		c.JSON(400, VO.CommonResp{
