@@ -8,6 +8,14 @@ DN42 config generate Sever (Backend)
 
 密码需要 8-20 长度
 
+错误情况: 400 为默认返回错误, 200 为请求成功 看情况进行解析
+
+ErrorCode 和 Message 用于联合标识错误 ErrorCode 目前没有其他意义 解析的时候可以丢弃 
+
+较为重要的是 ErrorMsg
+
+不存在 返回 非200 的同时 返回正常数据结构体 是必然返回 ErrorCode 和 ErrorMsg 的结构体
+
 # VO
 
 ## /api/v1/ APIs
@@ -63,6 +71,33 @@ return
     }, 
     ...
 ]
+```
+
+### /peerinfo/me
+
+快速获取当前用户的配置信息
+
+Method: GET
+
+request
+
+```json
+```
+
+return
+
+200 == success
+
+```json
+{
+  "id": "XXX",
+  "username": "yourid like esonhugh",
+  "asn": "4242421234",
+  "public_access": "XXXX.dn42.youdomain.com or IPv4 IPv6",
+  "wireguard_key": "[BASE64 String]==",
+  "dn42_ipv4": "172.20.xx.xx",
+  "dn42_ipv6": "fe80::XXXX"
+}
 ```
 
 
