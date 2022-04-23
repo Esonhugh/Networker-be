@@ -6,20 +6,14 @@ import (
 )
 
 func (g *GinList) RegisterRouter() {
+	// Global middleware Allow Cors Policy.
+	g.MainWeb.Use(handlers.SetCorsPolicy)
 	// apis Main api
 	apis := g.MainWeb.Group("/api/v1")
 	{
 		apis.GET("/ping", handlers.Ping)
 		apis.GET("/config", handlers.GetConfig)
 
-		// peerinfo sub-api path
-		peerinfo := apis.Group("/peerinfo")
-		{
-			peerinfo.GET("/list", jwt.JWTAuthMiddleware, handlers.GetPeerList)
-			peerinfo.GET("/me", jwt.JWTAuthMiddleware, handlers.GetMyInfo)
-			peerinfo.GET("/:id", jwt.JWTAuthMiddleware, handlers.GetPeerInfo)
-			peerinfo.POST("/", jwt.JWTAuthMiddleware, handlers.UpdatePeerInfo)
-		}
 		// auth sub-api path
 		auth := apis.Group("/auth")
 		{
@@ -27,6 +21,16 @@ func (g *GinList) RegisterRouter() {
 			auth.Any("/logout", handlers.LogoutHandler)
 			auth.POST("/register", handlers.RegisterHandler)
 			auth.GET("/verify/:ticket", handlers.VerifyHandler)
+		}
+
+		// PeerInfo sub-api path
+		PeerInfo := apis.Group("/peerinfo")
+		PeerInfo.Use(jwt.JWTAuthMiddleware)
+		{
+			PeerInfo.GET("/list", handlers.GetPeerList)
+			PeerInfo.GET("/me", handlers.GetMyInfo)
+			PeerInfo.GET("/:id", handlers.GetPeerInfo)
+			PeerInfo.POST("/", handlers.UpdatePeerInfo)
 		}
 	}
 }
