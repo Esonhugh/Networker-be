@@ -30,6 +30,14 @@ func AuthHandler(c *gin.Context) {
 	// 校验用户名和密码是否正确
 	var UserInDB PO.Auth
 	db.DBService.MainDB.Where("username = ?", user.Username).First(&UserInDB)
+	// 未验证不许登陆
+	if !UserInDB.Verify {
+		c.JSON(400, VO.CommonResp{
+			ErrorCode: "40033",
+			ErrorMsg:  "User Unverified can't Login",
+		})
+		return
+	}
 	if UserInDB.CheckPassword(user.Password) {
 		// 生成Token
 		tokenString, _ := jwt.GenToken(user.Username)
