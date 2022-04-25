@@ -38,6 +38,7 @@ func GetPeerInfo(c *gin.Context) {
 	}
 }
 
+// GetMyInfo 获取自己的信息
 func GetMyInfo(c *gin.Context) {
 	var myInfo peerinfo.DetailPeer
 	user, ok := c.Get("username")

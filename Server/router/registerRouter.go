@@ -29,6 +29,7 @@ func (g *GinList) RegisterRouter() {
 		{
 			PeerInfo.GET("/list", handlers.GetPeerList)
 			PeerInfo.GET("/me", handlers.GetMyInfo)
+			PeerInfo.GET("/", handlers.GetMyInfo)
 			PeerInfo.GET("/:id", handlers.GetPeerInfo)
 			PeerInfo.POST("/", handlers.UpdatePeerInfo)
 		}
