@@ -12,7 +12,7 @@ func SetCorsPolicy(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin",
 			config.GlobalConfig.GetString("server.cors.origin"))
 		c.Header("Access-Control-Allow-Headers",
-			"Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+			"Content-Type, Content-Length, Auth, Authorization, accept, origin")
 		c.Header("Access-Control-Allow-Methods",
 			config.GlobalConfig.GetString("server.cors.methods"))
 		c.Header("Access-Control-Allow-Credentials",

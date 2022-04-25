@@ -3,6 +3,7 @@ package jwt
 import (
 	"Network-be/data/VO"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 // JWTAuthMiddleware JWT中间件 CheckJWTtoken
@@ -10,8 +11,9 @@ func JWTAuthMiddleware(c *gin.Context) {
 	// 客户端携带Token有三种方式 1.放在请求头 2.放在请求体 3.放在URI
 	// 这里假设Token放在Header的Authorization中，并使用Bearer开头
 	// 这里的具体实现方式要依据你的实际业务情况决定
-	authHeader, err := c.Cookie("Token")
-	if err != nil {
+	// authHeader, err := c.Cookie("Token")
+	auth := strings.Split(c.GetHeader("Auth"), " ")
+	if len(auth) != 1 {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "1",
 			ErrorMsg:  "Token Error",
@@ -19,6 +21,7 @@ func JWTAuthMiddleware(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	authHeader := auth[0]
 	if authHeader == "" {
 		c.JSON(400, VO.CommonResp{
 			ErrorCode: "1",

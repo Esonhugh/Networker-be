@@ -33,10 +33,10 @@ func AuthHandler(c *gin.Context) {
 	if UserInDB.CheckPassword(user.Password) {
 		// 生成Token
 		tokenString, _ := jwt.GenToken(user.Username)
-		c.SetCookie("Token", tokenString, 3600, "/", "", false, false)
+		c.Header("Auth", tokenString)
 		c.JSON(200, VO.CommonResp{
-			ErrorCode: "0",
-			ErrorMsg:  "success",
+			ErrorCode: tokenString,
+			ErrorMsg:  "Login Success",
 		})
 		return
 	}
