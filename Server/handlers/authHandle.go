@@ -106,6 +106,7 @@ func RegisterHandler(c *gin.Context) {
 						ErrorCode: "5001",
 						ErrorMsg:  "Internal Server Error: Mail Send Failed",
 					})
+					return
 				}
 				c.JSON(200, VO.CommonResp{
 					ErrorCode: "0",
