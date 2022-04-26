@@ -55,7 +55,8 @@ func AuthHandler(c *gin.Context) {
 	return
 }
 
-// LogoutHandler 登出
+// LogoutHandler 登出 deleted
+/*
 func LogoutHandler(c *gin.Context) {
 	c.JSON(200, VO.CommonResp{
 		ErrorCode: "0",
@@ -64,6 +65,7 @@ func LogoutHandler(c *gin.Context) {
 	c.SetCookie("Token", "", -1, "/", "", false, false)
 	return
 }
+*/
 
 // RegisterHandler 注册用户
 func RegisterHandler(c *gin.Context) {
