@@ -6,9 +6,9 @@ type UpdateInfo struct {
 	Username     string `json:"username" binding:"required,min=1,max=20"`
 	Asn          string `json:"asn"`
 	PublicAccess string `json:"public_access" binding:"required,fqdn|ipv4|ipv6"`
-	WireguradKey string `json:"wireguard_key" binding:"required,base64"`
+	WireguardKey string `json:"wireguard_key" binding:"required,base64"`
 	DN42_IPv4    string `json:"dn42_ipv4" binding:"required,ipv4,omitempty"`
-	DN42_IPv6    string `json:"dn42_ipv6" binding:"required,ipv6"`
+	DN42_IPv6    string `json:"dn42_ipv6" binding:"required,ipv6,omitempty"`
 }
 
 func (u *UpdateInfo) ToPO() *PO.Config {
@@ -16,7 +16,7 @@ func (u *UpdateInfo) ToPO() *PO.Config {
 		Username:     u.Username,
 		Asn:          u.Asn,
 		PublicAccess: u.PublicAccess,
-		WireguardKey: u.WireguradKey,
+		WireguardKey: u.WireguardKey,
 		DN42_IPv4:    u.DN42_IPv4,
 		DN42_IPv6:    u.DN42_IPv6,
 	}

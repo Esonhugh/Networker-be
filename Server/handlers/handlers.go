@@ -44,10 +44,13 @@ func GetMyInfo(c *gin.Context) {
 	user, ok := c.Get("username")
 	if ok {
 		if db.DBService.MainDB.Model(&PO.Config{}).Where("username = ?", user.(string)).First(&myInfo).Error != nil {
-			c.JSON(400, VO.CommonResp{
-				ErrorCode: "0",
-				ErrorMsg:  "You have not Create Yet",
-			})
+			/*
+				c.JSON(400, VO.CommonResp{
+					ErrorCode: "0",
+					ErrorMsg:  "You have not Create Yet",
+				})
+			*/
+			c.JSON(200, myInfo)
 		} else {
 			c.JSON(200, myInfo)
 		}

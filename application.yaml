@@ -25,12 +25,12 @@ email:
   host: "smtp.126.com"                        # smtp服务器地址
   port: 25                                    # 端口
   user: "config_server@126.com"               # 发送邮件的邮箱
-  auth: "BDZVAKLFPUSNWEGM"                    # 邮箱授权码
+  auth: "ZWIWEASTXZVKHLXZ"                    # 邮箱授权码
 
 server:
-  port: "8080"                                # Web 服务端口
-  host: "127.0.0.1:8080/api/v1/auth/verify/"  # 服务的 IP 地址 用于接受 邮件的 Call Back 的地方
+  port: "8090"                                # Web 服务端口
+  host: "localhost:8080/#/verify/"  # 服务的 IP 地址 用于接受 邮件的 Call Back 的地方 inmail will be //{host}{tokens}
   cors:
-    origin: "localhost"                        # 允许跨域的域名
+    origin: "http://localhost:8080"            # 允许跨域的域名
     methods: "GET,HEAD,POST,OPTION"            # 允许跨域的方法
     allowCredentials: true                     # 允许跨域的用户凭证
