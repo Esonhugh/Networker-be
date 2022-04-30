@@ -1,0 +1,33 @@
+name: Go
+on:
+  push:
+    branches:
+      - master
+      - main
+      - Skyworship
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: load Go 1.18 env
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.18
+        id: go
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Get dependencies
+        run: |
+          go mod tidy
+
+      - name: Build
+        run: |
+          bash buildup.sh
+
+      - name: Lookup
+        run: |
+          ls -al
+          tree .
