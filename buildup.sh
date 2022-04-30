@@ -5,7 +5,7 @@ function build_main_web() {
     go build -o output/webserver ./main.go
 }
 
-function build_export_tools() {
+function build_export_tool() {
     go build -o output/admintool/exporter ./admin/export.go
 }
 
