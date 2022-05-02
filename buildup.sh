@@ -28,6 +28,7 @@ function  build() {
     build_tools
 }
 
+go mod tidy
 build
 cp ./application.yaml ./output/
 echo "build Success... Look your ./output/ dir"
